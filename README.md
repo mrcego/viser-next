@@ -1,4 +1,4 @@
-# vue-slots-experimental
+# viser-next
 
 ## Project setup
 ```
