@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-app-bar dense color="accent" dark class="elevation-1" app>
+  <v-app-bar dense color="accent" dark class="elevation-1" app>
+    <template v-if="isLogin">
       <v-app-bar-nav-icon
         color="primary"
         @click.stop="openSidebar"
@@ -18,16 +18,28 @@
       <v-btn icon color="primary">
         <v-icon>mdi-bell</v-icon>
       </v-btn>
-    </v-app-bar>
 
-    <the-sidebar :drawer="drawer" @open-sidebar="drawer = false" />
-  </div>
+      <the-sidebar :drawer="drawer" @open-sidebar="drawer = false" />
+    </template>
+    <template v-else>
+      <v-btn block depressed color="primary" @click="test">
+        INICIA SESIÓN Ó REGISTRATE
+      </v-btn>
+    </template>
+  </v-app-bar>
 </template>
 
 <script>
 import TheSidebar from '@/components/Commons/TheSidebar'
 
 export default {
+  props: {
+    isLogin: {
+      type: Boolean,
+      default: false,
+      required: true
+    }
+  },
   data: () => ({
     drawer: false
   }),
@@ -48,6 +60,11 @@ export default {
       setTimeout(() => {
         this.drawer = true
       })
+    },
+    test: function() {
+      this.$httpv2('/categories', {
+        method: 'get'
+      }).then(response => console.log(response))
     }
   }
 }

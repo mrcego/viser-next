@@ -1,7 +1,7 @@
 <template>
   <v-bottom-navigation
     app
-    :value="activeBtn"
+    :value="activeButton"
     grow
     color="primary"
     class="elevation-1"
@@ -20,7 +20,7 @@
       <span>Carrito</span>
       <v-icon>mdi-cart</v-icon>
     </v-btn>
-    <v-btn>
+    <v-btn v-if="isLogin">
       <span>Promos</span>
       <v-icon>mdi-sale</v-icon>
     </v-btn>
@@ -29,9 +29,16 @@
 
 <script>
 export default {
+  props: {
+    isLogin: {
+      type: Boolean,
+      default: false,
+      required: true
+    }
+  },
   data() {
     return {
-      activeBtn: 0
+      activeButton: 0
     }
   }
 }

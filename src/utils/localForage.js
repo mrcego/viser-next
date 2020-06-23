@@ -9,7 +9,25 @@ const methods = {
   },
   destroy: function(key) {
     return Vue.$vlf.removeItem(key)
+  },
+  destroyAll: function() {
+    return Vue.$vlf.clear()
   }
+}
+
+function descriptionResolver(method, key, response) {
+  if (response === null) {
+    return `There isn't a '${key}' key.`
+  }
+
+  if (typeof response == 'undefined') {
+    if (key) {
+      return `Destroyed '${key}'... if there is one.`
+    } else {
+      return `Destroyed all keys and offline DB now is clean.`
+    }
+  }
+  return `'${response}' from '${method}' method in '${key}' key.`
 }
 
 export default function localForage(method, key, value = null) {
@@ -18,16 +36,17 @@ export default function localForage(method, key, value = null) {
 
   if (!value && method == 'set') throw `Hey!! Provide a value for '${key}' key!`
 
+  if (method == 'destroyAll' && (key || value))
+    throw `Parameters for '${method}' method isn't needed`
+
   return new Promise((resolve, reject) => {
     try {
       methods[method](key, value)
         .then(v => {
-          if (v === null) resolve(`There isn't a '${key}' key.`)
-
-          if (typeof v == 'undefined')
-            reject(`Destroyed ${key}... if there is one.`)
-
-          resolve(`'${v}' from '${method}' method in '${key}' key.`)
+          resolve({
+            response: v,
+            description: descriptionResolver(method, key, v)
+          })
         })
         .catch(err => reject(err))
     } catch (err) {

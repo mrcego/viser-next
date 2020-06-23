@@ -34,12 +34,7 @@
     <v-divider></v-divider>
 
     <v-list dense class="options-list">
-      <v-list-item
-        v-for="(option, index) in sidebarOptions"
-        :key="index"
-        link
-        @click="test"
-      >
+      <v-list-item v-for="(option, index) in sidebarOptions" :key="index" link>
         <v-list-item-icon class="mr-4">
           <v-icon size="36" :color="option.icon.color"
             >mdi-{{ option.icon.name }}</v-icon
@@ -74,7 +69,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import localForage from '@/utils/localForage'
 
 export default {
   props: {
@@ -130,28 +124,6 @@ export default {
       set(drawer) {
         this.$emit('input', drawer)
       }
-    }
-  },
-  methods: {
-    test: function() {
-      localForage('get', 'test').then(v => console.log(v))
-      // if (!localForage.get('test')) {
-      //   localForage.set('test', 'hello')
-      // } else {
-      //   localForage.destroy('test')
-      // }
-
-      // localForage.getItem('test').then(v => {
-      //   if (!v) {
-      //     this.$vlf.setItem('test', 'hello').then(v => {
-      //       console.log('created ' + v)
-      //     })
-      //   } else {
-      //     this.$vlf.removeItem('test').then(() => {
-      //       console.log('removed')
-      //     })
-      //   }
-      // })
     }
   }
 }

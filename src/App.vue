@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <the-toolbar />
+    <the-toolbar :isLogin="isLogin" />
     <v-main>
       <v-container fluid class="pa-0">
         <v-row justify="center">
@@ -12,7 +12,7 @@
         </v-row>
       </v-container>
     </v-main>
-    <the-bottom-navigation />
+    <the-bottom-navigation :isLogin="isLogin" />
   </v-app>
 </template>
 
@@ -21,18 +21,23 @@ import TheToolbar from '@/components/Commons/TheToolbar'
 import TheBottomNavigation from '@/components/Commons/TheBottomNavigation'
 export default {
   name: 'App',
-  components: {
-    TheToolbar,
-    TheBottomNavigation
-  },
+  data: () => ({
+    openSidebar: false,
+    isLogin: false
+  }),
   watch: {
     openSidebar: function(val) {
       console.log(val)
     }
   },
-  data: () => ({
-    openSidebar: false
-  })
+  async beforeCreate() {
+    let { response } = await this.$auth()
+    this.isLogin = !!response
+  },
+  components: {
+    TheToolbar,
+    TheBottomNavigation
+  }
 }
 </script>
 
